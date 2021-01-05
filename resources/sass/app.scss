@@ -1,0 +1,48 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~sweetalert2/dist/sweetalert2.min.css';
+@import "~font-awesome/scss/font-awesome";
+
+label.true:before {
+    font-family: "Line Awesome Free", serif;
+    vertical-align: super;
+    font-size: 0.6em;
+    font-weight: 900;
+    content: "*";
+    color: $danger;
+}
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+.precio{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    &::before {
+        vertical-align: super;
+        font-size: 0.55em;
+        content: '$';
+    }
+}
+.custom-file-input:lang(es) ~ .custom-file-label::after {
+    content: 'Examinar';
+}
+@include media-breakpoint-up(md) {
+    .img-todo{
+        max-height: 7em;
+    }
+}
+@include media-breakpoint-down(md) {
+    .img-todo{
+        max-width: 100%;
+    }
+}
