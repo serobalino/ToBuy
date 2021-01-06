@@ -45,7 +45,7 @@
                                     v-model.number="lista.precioxl_li"
                                     class="form-control"
                                     :class="classes"
-                                    placeholder="7.00"
+                                    placeholder="costo de libra"
                                     min="0"
                                     :disabled="preciosLd"
                                     step="any">
@@ -64,7 +64,7 @@
                                     v-model.number="lista.enviolocal_li"
                                     class="form-control"
                                     :class="classes"
-                                    placeholder="5.25"
+                                    placeholder="costo de envio local"
                                     min="0.00"
                                     :disabled="preciosLd"
                                     step="any">
