@@ -8,7 +8,12 @@ class Importador {
         return axios.get(`${PREFIJO}/listas/${id}`);
     }
 
-    producto (formulario) {
+    producto (producto,bandera) {
+        const formulario = {
+            estado:bandera,
+            peso:producto.librasR_pr,
+            id:producto.id_pr
+        };
         return axios.post(`${PREFIJO}/productos`,formulario);
     }
 

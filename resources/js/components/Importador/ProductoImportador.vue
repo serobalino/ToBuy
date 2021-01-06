@@ -18,6 +18,10 @@
                 <p v-if="value.erastreo_pr"><b>Empresa: </b>{{ value.erastreo_pr }}</p>
                 <p v-if="value.rastreo_pr"><b>TrackID: </b><span class="text-info">{{ value.rastreo_pr }}</span></p>
                 <p v-if="value.cant_pr"><b>Cantidad: </b>{{ value.cant_pr }}</p>
+                <div v-if="value.cant_pr>1">
+                    <b-badge variant="warning">Peso web c/u</b-badge>
+                    {{ value.libras_pr | moneda}} lb
+                </div>
             </div>
             <div class="col-12 col-lg text-lg-right p-1">
                 <b-badge :href="value.url_pr" variant="info" target="_blank">{{ dominio }}</b-badge>
@@ -71,8 +75,9 @@
                     </ValidationProvider>
                 </form>
             </ValidationObserver>
-            <button class="btn btn-sm btn-outline-info" type="button" @click="recibido">
-                <i class="fa fa-truck"></i>
+            <button class="btn btn-sm btn-outline-info" type="button" @click="recibido" v-if="canTrack">
+                <i class="fa fa-cog fa-spin fa-fw" v-if="cargandoBt"></i>
+                <i class="fa fa-truck" v-else></i>
                 Recibido en USA
             </button>
         </small>
@@ -81,6 +86,8 @@
 
 <script>
 import moment from "moment";
+import {enumeraciones} from "../../constantes";
+import {Importador} from "../../servicios";
 
 export default {
     name: "ProductoImportador",
@@ -96,6 +103,7 @@ export default {
     },
     data:()=>({
         cargando: false,
+        cargandoBt: false,
     }),
     computed: {
         dominio() {
@@ -106,8 +114,12 @@ export default {
                 return null
             }
         },
-        costoEnvioLocal() {
-
+        canTrack() {
+            try {
+                return enumeraciones.puedeRecibirUSA.findIndex(i=>i===this.value.estado_pr) >= 0 && !this.value.librasR_pr;
+            }catch (e) {
+                return false;
+            }
         }
     },
     filters: {
@@ -121,18 +133,41 @@ export default {
         }
     },
     methods: {
-        guardar: function () {
-
+        guardar: function (bandera = false) {
+            this.cargando = !bandera;
+            this.cargandoBt = bandera;
+            return Importador.producto(this.value,bandera).then(()=>{
+                this.value.estado_pr='Cambiado';
+                this.cargando = false;
+                this.cargandoBt = false;
+            }).catch(()=>{
+                this.cargando = false;
+                this.cargandoBt = false;
+            })
         },
         recibido: function () {
-            //
+            this.$swal({
+                title: this.value.detalle_pr,
+                html: '<b>¿Recibió este producto?</b>',
+                showLoaderOnConfirm: true,
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                confirmButtonAriaLabel: 'No',
+                cancelButtonText: 'No',
+                cancelButtonAriaLabel: 'Si',
+                preConfirm: (aux) => {
+                    return this.guardar(true).then(()=>{
+                        return aux;
+                    })
+                }
+            });
         }
     }
 }
 </script>
 
 <style scoped>
-p, h3 {
+p, h3, .invalid-feedback {
     margin: 0;
 }
 

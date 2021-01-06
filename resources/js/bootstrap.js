@@ -13,6 +13,7 @@ import { configure, ValidationProvider, ValidationObserver, extend, localize } f
 import es from 'vee-validate/dist/locale/es.json'
 import * as rules from 'vee-validate/dist/rules'
 import VueSweetalert2 from 'vue-sweetalert2';
+import VueClipboard from 'vue-clipboard2';
 
 
 configure({
@@ -55,6 +56,7 @@ moment.locale('es')
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueSweetalert2);
+Vue.use(VueClipboard);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

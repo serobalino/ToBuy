@@ -43,7 +43,19 @@
                 Agregar colaborador
             </button>
         </p>
-        <pre v-if="lista.creador_se">{{lista.lista.code_li}}</pre>
+        <div v-if="lista.creador_se">
+            <div class="input-group input-group-sm">
+                <span type="text" class="form-control" v-on:click="copiar">{{lista.lista.code_li}}</span>
+                <div class="input-group-append">
+                    <button class="btn btn-danger" type="button" v-on:click="copiar" id="tooltip-copiado">
+                        <i class="fa fa-copy"/>
+                    </button>
+                </div>
+            </div>
+            <b-tooltip :show.sync="copiado" target="to  oltip-copiado">
+                Copiado al portapapeles
+            </b-tooltip>
+        </div>
         <modal-colaborador
             v-model="modal"
             :lista="lista"
@@ -57,6 +69,7 @@ export default {
     name: "ListaDetails",
     data:()=>({
         modal:false,
+        copiado:false,
         columnas:[
             {
                 key: 'det',
@@ -90,6 +103,16 @@ export default {
         suma: function (key, lista) {
             return lista.reduce((suma, i) => suma + parseFloat(i[key]), 0)
         },
+        copiar: function(){
+            this.$copyText(this.lista.lista.code_li).then(()=> {
+                this.copiado=true;
+                // setTimeout(()=>{
+                //     this.copiado=false;
+                // },3000)
+            },()=> {
+                alert('Can not copy')
+            })
+        }
     },
     computed:{
         items(){

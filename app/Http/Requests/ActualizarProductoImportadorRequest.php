@@ -24,9 +24,9 @@ class ActualizarProductoImportadorRequest extends FormRequest
     public function rules()
     {
         return [
-            'estado'    =>  'boolean',
+            'estado'    =>  'required|boolean',
             'peso'      =>  'nullable|numeric',
-            'id'        =>  'exists:productos,id_pr',
+            'id'        =>  'required|exists:productos,id_pr',
         ];
     }
 }
