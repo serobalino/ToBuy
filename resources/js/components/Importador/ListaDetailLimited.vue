@@ -106,7 +106,7 @@
         </div>
     </div>
     <div v-else class="text-center">
-        <h1>Error</h1>
+        <b-spinner style="width: 5rem; height: 5rem;" label="Cargando"></b-spinner>
     </div>
 </template>
 
