@@ -10,7 +10,7 @@ class Importador {
 
     producto (producto,bandera) {
         const formulario = {
-            estado:bandera,
+            estado:!!bandera,
             peso:producto.librasR_pr,
             id:producto.id_pr
         };

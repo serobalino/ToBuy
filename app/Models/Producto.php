@@ -16,6 +16,10 @@ class Producto extends Model
 
     protected $appends = ['img_pr','pvpxc_pr','estxc_pr','realxc_pr'];//imagen, precio x cantidad, estimado de enevio x cantidad, real de envio x cantidad
 
+    protected $casts = [
+        'librasR_pr' => 'float',
+    ];
+
     public function dueno () {
         return $this->hasOne(User::class,'id','id_us');
     }

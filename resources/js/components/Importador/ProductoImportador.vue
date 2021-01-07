@@ -20,14 +20,14 @@
                 <p v-if="value.cant_pr"><b>Cantidad: </b>{{ value.cant_pr }}</p>
                 <div v-if="value.cant_pr>1">
                     <b-badge variant="warning">Peso web c/u</b-badge>
-                    {{ value.libras_pr | moneda}} lb
+                    {{ value.libras_pr | moneda }} lb
                 </div>
             </div>
             <div class="col-12 col-lg text-lg-right p-1">
                 <b-badge :href="value.url_pr" variant="info" target="_blank">{{ dominio }}</b-badge>
                 <div v-if="value.libras_pr">
                     <b-badge variant="success">Peso web</b-badge>
-                    {{ value.estxc_pr | moneda}} lb
+                    {{ value.estxc_pr | moneda }} lb
                 </div>
                 <div v-if="value.libras_pr && lista.precioxl_li">
                     <b-badge variant="success">Costo de envio estimado</b-badge>
@@ -35,7 +35,7 @@
                 </div>
                 <div v-if="value.librasR_pr">
                     <b-badge variant="danger">Peso real</b-badge>
-                    {{ (value.cant_pr * value.librasR_pr ) | moneda }} lb
+                    {{ (value.cant_pr * value.librasR_pr) | moneda }} lb
                 </div>
                 <div v-if="value.librasR_pr && lista.precioxl_li">
                     <b-badge variant="danger">Costo de envio real</b-badge>
@@ -48,10 +48,11 @@
         </div>
         <small class="d-flex justify-content-between">
             <ValidationObserver v-slot="{ handleSubmit }" ref="formAct">
-                <form @submit.prevent="handleSubmit(guardar)">
+                <form @submit.prevent="handleSubmit(guardar(false))">
                     <ValidationProvider
                         v-slot="{ errors, classes }"
                         name="peso real"
+                        ref="peso"
                         :rules="{required:true,decimal:2}"
                         tag="div"
                         class="input-group input-group-sm pt-2 pr-1 p-lg-0"
@@ -61,17 +62,11 @@
                             class="form-control"
                             :class="classes"
                             v-model.number="value.librasR_pr"
+                            @input="validarNumero"
                             placeholder="Peso Real Unitario"
-                            :disabled="cargando"
                             min="0"
                             step="any"
                         >
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="submit" :disabled="cargando">
-                                <i class="fa fa-cog fa-spin fa-fw" v-if="cargando" />
-                                <i class="fa fa-save" v-else />
-                            </button>
-                        </div>
                     </ValidationProvider>
                 </form>
             </ValidationObserver>
@@ -86,6 +81,7 @@
 
 <script>
 import moment from "moment";
+import _ from 'lodash'
 import {enumeraciones} from "../../constantes";
 import {Importador} from "../../servicios";
 
@@ -101,7 +97,7 @@ export default {
             required: true
         },
     },
-    data:()=>({
+    data: () => ({
         cargando: false,
         cargandoBt: false,
     }),
@@ -116,8 +112,8 @@ export default {
         },
         canTrack() {
             try {
-                return enumeraciones.puedeRecibirUSA.findIndex(i=>i===this.value.estado_pr) >= 0 && !this.value.librasR_pr;
-            }catch (e) {
+                return enumeraciones.puedeRecibirUSA.findIndex(i => i === this.value.estado_pr) >= 0 && !this.value.librasR_pr;
+            } catch (e) {
                 return false;
             }
         }
@@ -133,15 +129,19 @@ export default {
         }
     },
     methods: {
+        validarNumero:_.debounce(async function() {
+            const validate = await this.$refs.peso.validate();
+            if (validate.valid) {
+                this.guardar(false)
+            }
+        },500),
         guardar: function (bandera = false) {
-            this.cargando = !bandera;
             this.cargandoBt = bandera;
-            return Importador.producto(this.value,bandera).then(()=>{
-                this.value.estado_pr='Cambiado';
-                this.cargando = false;
+            return Importador.producto(this.value, bandera).then(() => {
+                this.value.estado_pr = 'Cambiado';
                 this.cargandoBt = false;
-            }).catch(()=>{
-                this.cargando = false;
+            }).catch((error) => {
+                this.$refs.formAct.setErrors(error.response.data.errors)
                 this.cargandoBt = false;
             })
         },
@@ -156,7 +156,7 @@ export default {
                 cancelButtonText: 'No',
                 cancelButtonAriaLabel: 'Si',
                 preConfirm: (aux) => {
-                    return this.guardar(true).then(()=>{
+                    return this.guardar(true).then(() => {
                         return aux;
                     })
                 }
