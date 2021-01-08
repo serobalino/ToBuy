@@ -50,12 +50,20 @@
                 <span>{{ lista.id_us === item.id_us ? 'Mi orden' : 'Orden de ' + item.dueno.name }}</span>
                 <b-badge variant="dark">{{ item.estado_pr }}</b-badge>
             </div>
-            <button class="btn btn-sm btn-danger" type="button" @click="eliminar" v-if="item.id_us===lista.id_us">
-                Borrar
-            </button>
-            <button class="btn btn-sm btn-success" type="button" @click="seleccionar" v-if="item.id_us===lista.id_us">
-                Editar
-            </button>
+            <template v-if="puedeEditar">
+                <button class="btn btn-sm btn-danger" type="button" @click="eliminar" v-if="item.id_us===lista.id_us">
+                    Borrar
+                </button>
+                <button class="btn btn-sm btn-success" type="button" @click="seleccionar" v-if="item.id_us===lista.id_us">
+                    Editar
+                </button>
+            </template>
+            <template v-if="puedeRecibir">
+                <button class="btn btn-sm btn-info" type="button" @click="recibido" v-if="item.id_us===lista.id_us">
+                    Recibido
+                </button>
+            </template>
+
             <h3 v-if="precioProducto">
                 <span class="precio">{{ precioProducto  | moneda }}</span>
             </h3>
@@ -65,6 +73,8 @@
 
 <script>
 import moment from "moment";
+import {enumeraciones} from "../../constantes";
+import {Productos} from "../../servicios";
 
 export default {
     name: "Producto",
@@ -98,9 +108,14 @@ export default {
                 return 0;
             }
         },
-        costoEnvioLocal() {
-
-        }
+        puedeRecibir() {
+            const a = enumeraciones.puedeRecibirUser.findIndex(i=>i===this.item.estado_pr);
+            return a >= 0;
+        },
+        puedeEditar() {
+            const a = enumeraciones.puedeEditarUser.findIndex(i=>i===this.item.estado_pr);
+            return a >= 0;
+        },
     },
     filters: {
         fecha(valor) {
@@ -118,6 +133,30 @@ export default {
         },
         eliminar: function () {
             this.$emit('eliminar', this.item);
+        },
+        cambiarEstado: function(){
+            return Productos.updateEstado(this.item,this.lista).then((response)=>{
+                return response;
+            })
+        },
+        recibido: function() {
+            this.$swal({
+                title: this.item.detalle_pr,
+                html: '<b>¿Recibió este producto?</b>',
+                icon: 'question',
+                showLoaderOnConfirm: true,
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                confirmButtonAriaLabel: 'No',
+                cancelButtonText: 'No',
+                cancelButtonAriaLabel: 'Si',
+                preConfirm: (aux) => {
+                    return this.cambiarEstado().then(()=>{
+                        this.$emit('actualizar');
+                        return aux;
+                    });
+                }
+            });
         }
     }
 }

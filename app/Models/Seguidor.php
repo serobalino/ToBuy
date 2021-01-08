@@ -24,7 +24,7 @@ class Seguidor extends Model
 
     public function misProductos ()
     {
-        return $this->allProductos()->where('id_us','=',auth()->id())->orderBy('updated_at','desc');
+        return $this->allProductos()->where('id_us','=',auth()->id())->orderByDesc('estado_pr')->orderByDesc('updated_at');
     }
 
     public function allProductos ()

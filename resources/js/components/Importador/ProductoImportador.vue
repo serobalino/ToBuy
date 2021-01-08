@@ -149,6 +149,7 @@ export default {
             this.$swal({
                 title: this.value.detalle_pr,
                 html: '<b>¿Recibió este producto?</b>',
+                icon: 'question',
                 showLoaderOnConfirm: true,
                 showCancelButton: true,
                 confirmButtonText: 'Si',

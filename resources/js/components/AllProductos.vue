@@ -22,6 +22,7 @@
                                 :lista="lista"
                                 @seleccionado="seleccionar"
                                 @eliminar="confirmarEliminacion"
+                                @actualizar="consulta"
                             />
                         </b-list-group>
                     </div>

@@ -98,16 +98,20 @@ class ProductoController extends Controller
      */
     public function update(ActualizarProductoRequest $request, $id)
     {
-        $nueva              = Producto::find($id);
-        $nueva->detalle_pr  = $request->titulo;
-        $nueva->estado_pr   = $request->estado;
-        $nueva->rastreo_pr  = $request->codigo;
-        $nueva->erastreo_pr = $request->codigoe;
-        $nueva->fragil_pr   = $request->fragil;
-        $nueva->url_pr      = $request->url ? mb_strtolower($request->url) : null;
-        $nueva->pvp_pr      = $request->precio ? number_format($request->precio,2) : null;
-        $nueva->libras_pr   = number_format($request->peso,1);
-        $nueva->cant_pr     = $request->cantidad;
+        $nueva              = Producto::find($request->id);
+        if(@$request->cambioEstado){
+            $nueva->estado_pr = 'Entregado';
+        }else{
+            $nueva->detalle_pr  = $request->titulo;
+            $nueva->estado_pr   = $request->estado;
+            $nueva->rastreo_pr  = $request->codigo;
+            $nueva->erastreo_pr = $request->codigoe;
+            $nueva->fragil_pr   = $request->fragil;
+            $nueva->url_pr      = $request->url ? mb_strtolower($request->url) : null;
+            $nueva->pvp_pr      = $request->precio ? number_format($request->precio,2) : null;
+            $nueva->libras_pr   = number_format($request->peso,1);
+            $nueva->cant_pr     = $request->cantidad;
+        }
         $nueva->save();
         return response()->json(['val'=>true]);
     }

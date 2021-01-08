@@ -20,7 +20,7 @@ class Lista extends Model
 
     public function productos()
     {
-        return $this->hasMany(Producto::class,'id_li','id_li');
+        return $this->hasMany(Producto::class,'id_li','id_li')->where('estado_pr','!=','Entregado');
     }
 
     public function usuarios()

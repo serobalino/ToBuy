@@ -24,6 +24,23 @@ class Productos {
         return axios.patch(`${PREFIJO}/${formulario.id}`,formulario);
     }
 
+    updateEstado(producto) {
+        const formulario = {
+            cambioEstado: true,
+            titulo : producto.detalle_pr,
+            fragil : producto.fragil_pr,
+            peso : producto.libras_pr,
+            precio : producto.pvp_pr,
+            url : producto.url_pr,
+            codigoe : producto.erastreo_pr,
+            codigo : producto.rastreo_pr,
+            estado : producto.estado_pr,
+            id : producto.id_pr,
+            cantidad : producto.cant_pr,
+        }
+        return axios.patch(`${PREFIJO}/${formulario.id}`,formulario);
+    }
+
     delete(producto) {
         return axios.delete(`${PREFIJO}/${producto.id_pr}`);
     }
