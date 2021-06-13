@@ -37,7 +37,7 @@
             <tr>
                 <td class="desc">
                     @if($producto->url_pr)
-                    <img src="{{ $producto->url_pr  }}"/>
+                    <img src="{{ $producto->img_pr  }}"/>
                     @endif
                 </td>
                 <td class="center">{{ $producto->cant_pr }}</td>
