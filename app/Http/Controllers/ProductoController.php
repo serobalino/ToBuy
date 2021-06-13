@@ -8,7 +8,10 @@ use App\Http\Requests\NuevoProductoRequest;
 use App\Models\Lista;
 use App\Models\Producto;
 use App\Models\Seguidor;
+use Carbon\Carbon;
+use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -87,6 +90,18 @@ class ProductoController extends Controller
     public function edit($id)
     {
         //
+    }
+
+    public function generarReporte(Request $datos) {
+        $fecha = Carbon::now();
+        $idu = @auth()->id();
+        $lista = Seguidor::with('lista.usuarios')->where('id_li',$datos->id)->where('id_us',$idu)->first();
+        $pdf = PDF::loadView('reports.precios', [
+            'fecha'=> $fecha,
+            'lista'=> $lista,
+            'datos'=> $datos
+        ]);
+        return $pdf->stream('itsolutionstuff.pdf');
     }
 
     /**

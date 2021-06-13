@@ -12,6 +12,9 @@
                         <button class="btn btn-success btn-sm" type="button" v-if="lista.add_se || lista.creador_se" v-on:click="nuevo">
                             Agregar
                         </button>
+                        <button class="btn btn-info btn-sm" type="button" v-if="lista.add_se || lista.creador_se" v-on:click="reporte">
+                            Generar Reporte
+                        </button>
                     </div>
                     <div class="card-body">
                         <b-list-group>
@@ -82,6 +85,36 @@ export default {
                     return this.eliminar(item)
                 }
             });
+        },
+        reporte(){
+            this.$swal({
+                title: 'Ganacia',
+                html: 'Ingresa el valor de ganacia siendo 1 -> 0%',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                inputValidator: (value) => {
+                    if (!value || value<=1 || value>=100) {
+                        return 'Tienes que ingresar un valor mayor a 1'
+                    }
+                },
+                showLoaderOnConfirm: true,
+                showCancelButton: true,
+                confirmButtonText: 'Generar',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                preConfirm: (texto) => {
+                    const formulario= {
+                        id: this.id,
+                        ganacia: texto
+                    }
+                    return Productos.descargar(formulario).then((res)=>{
+                        window.open(res.request.responseURL, "_blank");
+                    })
+                }
+            })
         },
         eliminar(producto){
             return Productos.delete(producto).then(()=> {

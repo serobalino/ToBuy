@@ -27,4 +27,5 @@ Route::get('/home/{id}', [App\Http\Controllers\HomeController::class, 'show'])->
 Route::prefix('app')->group(function () {
     Route::resource('listas', App\Http\Controllers\ListaController::class);
     Route::resource('productos', App\Http\Controllers\ProductoController::class);
+    Route::get('listaPrecios', [App\Http\Controllers\ProductoController::class,'generarReporte']);
 });

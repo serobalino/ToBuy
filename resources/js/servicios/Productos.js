@@ -41,6 +41,10 @@ class Productos {
         return axios.patch(`${PREFIJO}/${formulario.id}`,formulario);
     }
 
+    descargar(formulario){
+        return axios.get(`/app/listaPrecios`,{ params: formulario })
+    }
+
     delete(producto) {
         return axios.delete(`${PREFIJO}/${producto.id_pr}`);
     }
