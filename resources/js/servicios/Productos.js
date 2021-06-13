@@ -11,12 +11,16 @@ class Productos {
     store(formulario,lista) {
         formulario.lista=lista.id_li;
         let form_data = new FormData();
+        let data = {};
+        const producto = 'imagen';
         for ( let key in formulario ) {
-            if(formulario[key]!==null){
+            if(key===producto){
                 form_data.append(key, formulario[key]);
+            }else{
+                data[key] = formulario[key]
             }
         }
-        return axios.post(`${PREFIJO}`,form_data);
+        return axios.post(`${PREFIJO}`,form_data,{params:data});
     }
 
     update(formulario,lista) {
