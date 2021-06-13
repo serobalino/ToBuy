@@ -36,7 +36,7 @@
         @foreach ($lista->productos_lista as $producto)
             <tr>
                 <td class="desc">
-                    @if($producto->url_pr)
+                    @if($producto->img_pr)
                     <img src="{{ $producto->img_pr  }}"/>
                     @endif
                 </td>
