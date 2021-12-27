@@ -291,7 +291,9 @@ export default {
             if(this.producto){
                 await Productos.update(this.formulario,this.lista);
             }else{
-                await Productos.store(this.formulario,this.lista);
+                await Productos.store(this.formulario,this.lista).catch((e)=>{
+                    console.log(e)
+                })
             }
             this.$emit('actualizar');
             this.bandera = false;
