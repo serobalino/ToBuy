@@ -48,15 +48,15 @@ class ProductoController extends Controller
         $nueva              = new Producto();
         $nueva->id_us       = auth()->id();
         $nueva->id_li       = $request->lista;
-        $nueva->detalle_pr  = $request->titulo;
-        $nueva->estado_pr   = $request->estado;
-        $nueva->rastreo_pr  = $request->codigo;
-        $nueva->erastreo_pr = $request->codigoe;
-        $nueva->fragil_pr   = $request->fragil;
+        $nueva->detalle_pr  = urldecode($request->titulo);
+        $nueva->estado_pr   = urldecode($request->estado);
+        $nueva->rastreo_pr  = urldecode($request->codigo);
+        $nueva->erastreo_pr = urldecode($request->codigoe);
+        $nueva->fragil_pr   = urldecode($request->fragil);
         $nueva->url_pr      = $request->url ? mb_strtolower($request->url) : null;
         $nueva->pvp_pr      = $request->precio ? number_format($request->precio,2) : null;
         $nueva->libras_pr   = number_format($request->peso,1);
-        $nueva->cant_pr     = $request->cantidad;
+        $nueva->cant_pr     = urldecode($request->cantidad);
         $nueva->save();
         if ($request->imagen) {
             Storage::disk('productos')->putFileAs(
@@ -117,15 +117,15 @@ class ProductoController extends Controller
         if(@$request->cambioEstado){
             $nueva->estado_pr = 'Entregado';
         }else{
-            $nueva->detalle_pr  = $request->titulo;
-            $nueva->estado_pr   = $request->estado;
-            $nueva->rastreo_pr  = $request->codigo;
-            $nueva->erastreo_pr = $request->codigoe;
-            $nueva->fragil_pr   = $request->fragil;
+            $nueva->detalle_pr  = urldecode($request->titulo);
+            $nueva->estado_pr   = urldecode($request->estado);
+            $nueva->rastreo_pr  = urldecode($request->codigo);
+            $nueva->erastreo_pr = urldecode($request->codigoe);
+            $nueva->fragil_pr   = urldecode($request->fragil);
             $nueva->url_pr      = $request->url ? mb_strtolower($request->url) : null;
             $nueva->pvp_pr      = $request->precio ? number_format($request->precio,2) : null;
             $nueva->libras_pr   = number_format($request->peso,1);
-            $nueva->cant_pr     = $request->cantidad;
+            $nueva->cant_pr     = urldecode($request->cantidad);
         }
         $nueva->save();
         return response()->json(['val'=>true]);

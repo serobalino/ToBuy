@@ -14,10 +14,12 @@ class Productos {
         let data = {};
         const producto = 'imagen';
         for ( let key in formulario ) {
-            if(key===producto){
-                form_data.append(key, formulario[key]);
-            }else{
-                data[key] = formulario[key]
+            if(formulario[key]){
+                if(key===producto){
+                    form_data.append(key, formulario[key]);
+                }else{
+                    data[key] = encodeURI(formulario[key]);
+                }
             }
         }
         return axios.post(`${PREFIJO}`,form_data,{params:data});
