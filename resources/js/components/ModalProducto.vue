@@ -289,13 +289,9 @@ export default {
         },
         async enviar(){
             if(this.producto){
-                await Productos.update(this.formulario,this.lista).catch(()=>{
-                    this.errorFn();
-                })
+                await Productos.update(this.formulario,this.lista);
             }else{
-                await Productos.store(this.formulario,this.lista).catch(()=>{
-                    this.errorFn();
-                })
+                await Productos.store(this.formulario,this.lista);
             }
             this.$emit('actualizar');
             this.bandera = false;
