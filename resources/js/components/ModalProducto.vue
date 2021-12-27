@@ -159,6 +159,7 @@
                     </b-form-checkbox>
                 </div>
                 <ValidationProvider
+                    v-if="!producto"
                     v-slot="{ errors, classes }"
                     name="imagen"
                     :rules="{image:true,size:5000}"
@@ -276,11 +277,25 @@ export default {
             this.cargando = true;
             this.enviar();
         },
+        error: function() {
+            this.cargando = false;
+            this.$swal({
+                html: `<b>Ha ocurrido un error vuelve a intentar</b>`,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            })
+        },
         async enviar(){
             if(this.producto){
-                await Productos.update(this.formulario,this.lista);
+                await Productos.update(this.formulario,this.lista).catch(()=>{
+                    this.error();
+                });
             }else{
-                await Productos.store(this.formulario,this.lista);
+                await Productos.store(this.formulario,this.lista).catch(()=>{
+                    this.error();
+                });
             }
             this.$emit('actualizar');
             this.bandera = false;

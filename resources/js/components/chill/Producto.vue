@@ -154,6 +154,9 @@ export default {
                     return this.cambiarEstado().then(()=>{
                         this.$emit('actualizar');
                         return aux;
+                    }).catch(()=>{
+                        this.$emit('actualizar');
+                        return aux;
                     });
                 }
             });
