@@ -277,7 +277,7 @@ export default {
             this.cargando = true;
             this.enviar();
         },
-        error: function() {
+        errorFn: function() {
             this.cargando = false;
             this.$swal({
                 html: `<b>Ha ocurrido un error vuelve a intentar</b>`,
@@ -289,13 +289,17 @@ export default {
         },
         async enviar(){
             if(this.producto){
-                await Productos.update(this.formulario,this.lista).catch(()=>{
-                    this.error();
-                });
+                await Productos.update(this.formulario,this.lista).then(()=>{
+
+                }).catch(()=>{
+                    this.errorFn();
+                })
             }else{
-                await Productos.store(this.formulario,this.lista).catch(()=>{
-                    this.error();
-                });
+                await Productos.store(this.formulario,this.lista).then(()=>{
+
+                }).catch(()=>{
+                    this.errorFn();
+                })
             }
             this.$emit('actualizar');
             this.bandera = false;
