@@ -14,7 +14,7 @@ class Productos {
         let data = {};
         const producto = 'imagen';
         for ( let key in formulario ) {
-            if(key===producto){
+            if(key===producto && formulario[key]){
                 form_data.append(key, formulario[key]);
             }else if (key==='url'){
                 data[key] = encodeURI(formulario[key]);

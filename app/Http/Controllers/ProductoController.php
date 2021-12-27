@@ -58,7 +58,7 @@ class ProductoController extends Controller
         $nueva->libras_pr   = number_format($request->peso,1);
         $nueva->cant_pr     = $request->cantidad;
         $nueva->save();
-        if ($request->imagen) {
+        if ($request->file('imagen')) {
             Storage::disk('productos')->putFileAs(
                 '', $request->file('imagen'), hash('fnv132',$nueva->id_pr)
             );
