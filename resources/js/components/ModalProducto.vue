@@ -292,7 +292,7 @@ export default {
                 await Productos.update(this.formulario,this.lista);
             }else{
                 await Productos.store(this.formulario,this.lista).catch((e)=>{
-                    console.log(e)
+                    console.error(e)
                 })
             }
             this.$emit('actualizar');
