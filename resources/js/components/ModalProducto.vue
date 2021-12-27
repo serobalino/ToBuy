@@ -289,15 +289,11 @@ export default {
         },
         async enviar(){
             if(this.producto){
-                await Productos.update(this.formulario,this.lista).then(()=>{
-
-                }).catch(()=>{
+                await Productos.update(this.formulario,this.lista).catch(()=>{
                     this.errorFn();
                 })
             }else{
-                await Productos.store(this.formulario,this.lista).then(()=>{
-
-                }).catch(()=>{
+                await Productos.store(this.formulario,this.lista).catch(()=>{
                     this.errorFn();
                 })
             }
