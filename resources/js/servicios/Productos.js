@@ -16,13 +16,18 @@ class Productos {
         for ( let key in formulario ) {
             if(key===producto && formulario[key]){
                 form_data.append(key, formulario[key]);
-            }else if (key==='url'){
+            }else if (key==='url' && formulario[key]){
                 data[key] = encodeURI(formulario[key]);
             }else{
                 data[key] = (formulario[key]);
             }
         }
-        return axios.post(`${PREFIJO}`,form_data,{params:data});
+        return axios.post(`${PREFIJO}`,form_data,{
+            params:data,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 
     update(formulario,lista) {
